@@ -220,7 +220,9 @@
         width: 100%;
       }
       .cronometer-history {
-        width: 327px;
+        width: 100%;
+        margin-right: 5px;
+
         background: white;
         display: flex;
         flex-direction: column;
@@ -233,7 +235,8 @@
         overflow-y: auto;
       }
       .cronometer-placing {
-        width: 327px;
+        width: 100%;
+        margin-left: 5px;
         background: white;
         display: flex;
         flex-direction: column;
@@ -306,8 +309,8 @@
           </button>
         </div>
         <div style="display: flex; justify-content: space-between">
-          <div id="cronometer-history" class="cronometer-history"></div>
-          <div id="cronometer-placing" class="cronometer-placing"></div>
+          <div id="cronometer-history"></div>
+          <div id="cronometer-placing"></div>
         </div>
       </div>
       <p class="signature">
@@ -317,12 +320,22 @@
     </div>
 
     <script>
-      document.getElementById(
-        "cronometer-history"
-      ).innerHTML = `<h1 class="cronometer-title">histórico</h1>`;
-      document.getElementById(
-        "cronometer-placing"
-      ).innerHTML = `<h1 class="cronometer-title">colocação</h1>`;
+      var stopwatchHistory = [];
+
+      if (stopwatchHistory.length > 0) {
+        document.getElementById(
+          "cronometer-history"
+        ).innerHTML = `<h1 class="cronometer-title">histórico</h1>`;
+        document.getElementById(
+          "cronometer-placing"
+        ).innerHTML = `<h1 class="cronometer-title">colocação</h1>`;
+        document.getElementById(
+          "cronometer-history"
+        ).className = `cronometer-history`;
+        document.getElementById(
+          "cronometer-placing"
+        ).className = `cronometer-placing`;
+      }
       document.addEventListener(
         "keydown",
         (event) => {
@@ -413,8 +426,6 @@
           document.getElementById("cronometer").innerText + " - pausado";
       };
 
-      var stopwatchHistory = [];
-
       const stop = () => {
         stopwatchHistory.push(
           document.getElementById("cronometer").innerText +
@@ -454,6 +465,12 @@
               )
               .join("")
           );
+        document.getElementById(
+          "cronometer-history"
+        ).className = `cronometer-history`;
+        document.getElementById(
+          "cronometer-placing"
+        ).className = `cronometer-placing`;
       };
 
       const timer = () => {
