@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://static.wikia.nocookie.net/sanrio/images/1/10/Hello-kitty.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abyssinica+SIL&family=Courier+Prime:wght@400;700&family=PT+Sans+Narrow&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body,
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+      }
+
+      .background {
+        width: 100vw;
+        height: 100vh;
+        background-color: #3e3e3e;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .cronometer {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        align-items: center;
+        color: black;
+        font-family: "Courier Prime", monospace;
+        font-weight: 400;
+        font-size: 120px;
+        z-index: 2;
+        background: white;
+        border-radius: 10px;
+        padding-top: 20px;
+        text-shadow: 0 1px 0 #cccccc, 0 2px 0 #cccccc, 0 3px 0 #cccccc,
+          0 4px 0 #cccccc, 0 5px 0 #cccccc, 0 6px 0 #cccccc, 0 7px 0 #cccccc,
+          0 8px 0 #cccccc, 0 9px 0 #cccccc, 0 50px 30px rgba(0, 0, 0, 0.3);
+      }
+      .milicronometer {
+        font-size: 50px;
+      }
+
+      .grid {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: 10px;
+      }
+
+      button {
+        font-size: 20px;
+        cursor: pointer;
+        font-family: "Courier Prime", monospace;
+        background: transparent;
+        /* border: 1px solid; */
+        border-radius: 6px;
+        background-color: white;
+        width: 327px;
+        padding: 4px 0px;
+        font-weight: bold;
+        letter-spacing: -2px;
+        z-index: 2;
+        transition: all 0.2s;
+      }
+      .start-button:hover {
+        color: green;
+        background: #eeffee;
+
+        -webkit-animation: shadow-pop-tr 0.3s
+          cubic-bezier(0.47, 0, 0.745, 0.715) both;
+        animation: shadow-pop-tr 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+      }
+      .pause-button:hover {
+        color: #bd8f4b;
+        background: #e9e0e0;
+
+        -webkit-animation: shadow-pop-tr 0.3s
+          cubic-bezier(0.47, 0, 0.745, 0.715) both;
+        animation: shadow-pop-tr 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+      }
+      .paused {
+        background: #bd8f4b;
+        color: #e9e0e0;
+        cursor: auto;
+      }
+      .stop-button:hover {
+        color: tomato;
+        background: #e9e0e0;
+
+        -webkit-animation: shadow-pop-tr 0.3s
+          cubic-bezier(0.47, 0, 0.745, 0.715) both;
+        animation: shadow-pop-tr 0.3s cubic-bezier(0.47, 0, 0.745, 0.715) both;
+      }
+      .main-hello-kitty {
+        position: relative;
+        top: 12px;
+        z-index: 3;
+        width: 300px;
+        left: -55px;
+      }
+      .main-container {
+        display: flex;
+        justify-content: center;
+        margin-top: -180px;
+        width: 1000px;
+        height: 400px;
+        flex-direction: column;
+      }
+      .main2-container {
+        display: flex;
+        justify-content: center;
+        margin-top: -180px;
+        width: 1000px;
+        height: 400px;
+        flex-direction: column;
+      }
+      .corner-hello-kitty {
+        position: absolute;
+        width: 300px;
+        left: 0;
+        bottom: 0;
+      }
+      .corner2-hello-kitty {
+        position: absolute;
+        width: 300px;
+        right: 70px;
+        top: 0;
+      }
+      .disabled-button {
+        background: green;
+        cursor: auto;
+      }
+      .disabled-button:disabled {
+        color: white;
+      }
+      .signature {
+        color: #dbdbdb;
+        position: absolute;
+        left: 10px;
+        bottom: 0;
+        font-family: "PT Sans Narrow", sans-serif;
+        letter-spacing: 1px;
+        font-size: 14px;
+        text-decoration: none;
+      }
+      a {
+        text-decoration: none;
+        color: #dbdbdb;
+        font-weight: bold;
+      }
+
+      @-webkit-keyframes shadow-pop-tr {
+        0% {
+          -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e,
+            0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+          box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e,
+            0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+          -webkit-transform: translateX(0) translateY(0);
+          transform: translateX(0) translateY(0);
+        }
+        100% {
+          -webkit-box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e,
+            3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e,
+            6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+          box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e,
+            4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e,
+            7px -7px #3e3e3e, 8px -8px #3e3e3e;
+          -webkit-transform: translateY(1px);
+          transform: translateY(1px);
+        }
+      }
+      @keyframes shadow-pop-tr {
+        0% {
+          -webkit-box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e,
+            0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+          box-shadow: 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e,
+            0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e, 0 0 #3e3e3e;
+          -webkit-transform: translateX(0) translateY(0);
+          transform: translateX(0) translateY(0);
+        }
+        100% {
+          -webkit-box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e,
+            3px -3px #3e3e3e, 4px -4px #3e3e3e, 5px -5px #3e3e3e,
+            6px -6px #3e3e3e, 7px -7px #3e3e3e, 8px -8px #3e3e3e;
+          box-shadow: 1px -1px #3e3e3e, 2px -2px #3e3e3e, 3px -3px #3e3e3e,
+            4px -4px #3e3e3e, 5px -5px #3e3e3e, 6px -6px #3e3e3e,
+            7px -7px #3e3e3e, 8px -8px #3e3e3e;
+          -webkit-transform: translateY(1px);
+          transform: translateY(1px);
+        }
+      }
+      .copyText {
+        position: relative;
+        top: 215px;
+        width: 100%;
+      }
+      .copyText-copied {
+        position: relative;
+        top: 215px;
+        background: green;
+        color: white;
+        width: 100%;
+      }
+    </style>
+    <title>Hello Kitty - Cronômetro</title>
+  </head>
+  <body>
+    <div class="background">
+      <div class="main-container">
+        <button class="copyText" onclick="copyText()" id="copyText">
+          copiar tempo
+        </button>
+        <img
+          class="main-hello-kitty"
+          src="https://i.pinimg.com/originals/52/3a/4f/523a4f9b649b6138cd9520fe437e433a.png"
+        />
+        <div class="cronometer">
+          <h1 id="cronometer" style="font-weight: 400">00:00:00</h1>
+          <p id="milicronometer" class="milicronometer">.000</p>
+        </div>
+        <div class="grid">
+          <button id="reset" onclick="stop()" class="stop-button">reset</button>
+          <button id="pause" onclick="pause()" class="pause-button">
+            pausar
+          </button>
+          <button id="start" onclick="start()" class="start-button">
+            iniciar
+          </button>
+        </div>
+      </div>
+      <p class="signature">
+        Feito por
+        <a href="https://www.instagram.com/cracogabriel/">Gabriel Craco</a>
+      </p>
+    </div>
+
+    <script>
+      document.addEventListener(
+        "keydown",
+        (event) => {
+          var name = event.key;
+          var code = event.code;
+
+          if (
+            code === "Space" &&
+            document.getElementById("start").innerText === "rodando"
+          ) {
+            pause();
+          } else if (
+            code === "Space" &&
+            (document.getElementById("start").innerText === "iniciar" ||
+              document.getElementById("start").innerText === "retomar")
+          ) {
+            start();
+          }
+        },
+        false
+      );
+
+      const copyText = () => {
+        document.getElementById("copyText").blur();
+        pause();
+        setTimeout(() => {
+          var copyText =
+            document.getElementById("cronometer").innerText +
+            document.getElementById("milicronometer").innerText;
+          document.getElementById("copyText").className = "copyText-copied";
+
+          navigator.clipboard.writeText(copyText);
+
+          document.getElementById("copyText").innerText =
+            "copiado: " + copyText;
+        }, 100);
+        setTimeout(() => {
+          document.getElementById("copyText").innerText = "copiar";
+          document.getElementById("copyText").className = "copyText";
+        }, 2000);
+      };
+
+      var prevTime,
+        stopwatchInterval,
+        elapsedTime = 0;
+
+      const start = () => {
+        if (!stopwatchInterval) {
+          stopwatchInterval = setInterval(function () {
+            if (!prevTime) {
+              prevTime = Date.now();
+            }
+            elapsedTime += Date.now() - prevTime;
+            prevTime = Date.now();
+            timer();
+          }, 50);
+        }
+        document.getElementById("start").innerText = "rodando";
+        if (document.getElementById("start").innerText === "rodando") {
+          document.getElementById("start").className = "disabled-button";
+          document.getElementById("start").setAttribute("disabled", "disabled");
+        } else {
+          document.getElementById("start").className = "start-button";
+          document.getElementById("start").removeAttribute("disabled");
+        }
+
+        if (document.getElementById("pause").innerText === "pausado") {
+          document.getElementById("pause").innerText = "pausar";
+          document.getElementById("pause").className = "pause-button";
+          document.getElementById("pause").removeAttribute("disabled");
+        }
+      };
+
+      const pause = () => {
+        if (stopwatchInterval) {
+          clearInterval(stopwatchInterval);
+          stopwatchInterval = null;
+        }
+        prevTime = null;
+        document.getElementById("pause").className = "paused";
+        document.getElementById("pause").innerText = "pausado";
+        document.getElementById("pause").setAttribute("disabled", "disabled");
+
+        document.getElementById("start").innerText = "retomar";
+        document.getElementById("start").className = "start-button";
+        document.getElementById("start").removeAttribute("disabled");
+        document.title =
+          document.getElementById("cronometer").innerText + " - pausado";
+      };
+
+      const stop = () => {
+        pause();
+        elapsedTime = 0;
+        timer();
+
+        if (document.getElementById("pause").innerText === "pausado") {
+          document.getElementById("pause").innerText = "pausar";
+          document.getElementById("pause").className = "pause-button";
+          document.getElementById("pause").removeAttribute("disabled");
+        }
+        document.getElementById("start").innerText = "iniciar";
+        document.getElementById("start").className = "start-button";
+        document.getElementById("start").removeAttribute("disabled");
+        document.getElementById("cronometer").innerText = "00:00:00";
+        document.title = "Hello Kitty - Cronômetro";
+      };
+
+      const timer = () => {
+        var tempTime = elapsedTime;
+        var milliseconds = tempTime % 1000;
+        tempTime = Math.floor(tempTime / 1000);
+        var seconds = tempTime % 60;
+        tempTime = Math.floor(tempTime / 60);
+        var minutes = tempTime % 60;
+        tempTime = Math.floor(tempTime / 60);
+        var hours = tempTime % 60;
+
+        var time =
+          (hours < 10 ? "0" + hours : hours) +
+          ":" +
+          (minutes < 10 ? "0" + minutes : minutes) +
+          ":" +
+          (seconds < 10 ? "0" + seconds : seconds);
+
+        var militime =
+          "." +
+          (milliseconds < 10
+            ? "00" + milliseconds
+            : milliseconds < 100
+            ? "0" + milliseconds
+            : milliseconds);
+
+        document.getElementById("milicronometer").innerText = militime;
+
+        document.getElementById("cronometer").innerText = time;
+        document.title =
+          (hours ? (hours < 10 ? "0" + hours : hours) + ":" : "") +
+          (minutes < 10 ? "0" + minutes : minutes) +
+          ":" +
+          (seconds < 10 ? "0" + seconds : seconds) +
+          " - Rodando";
+        return time;
+      };
+
+      document.body.addEventListener(
+        "keydown",
+        function (ev) {
+          ev = ev || window.event;
+          var key = ev.which || ev.keyCode;
+
+          var ctrl = ev.ctrlKey ? ev.ctrlKey : key === 17 ? true : false;
+
+          if (key == 67 && ctrl) {
+            copyText();
+          }
+        },
+        false
+      );
+    </script>
+  </body>
+</html>
