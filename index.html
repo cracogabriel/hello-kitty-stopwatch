@@ -219,6 +219,66 @@
         color: white;
         width: 100%;
       }
+      .cronometer-history {
+        width: 327px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        height: 100%;
+        margin-top: 10px;
+        min-height: 200px;
+        max-height: 400px;
+        font-family: "PT Sans Narrow", sans-serif;
+        overflow-y: auto;
+      }
+      .cronometer-placing {
+        width: 327px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        border-radius: 10px;
+        height: 100%;
+        margin-top: 10px;
+        min-height: 200px;
+        max-height: 400px;
+        font-family: "PT Sans Narrow", sans-serif;
+        overflow-y: auto;
+      }
+      .cronometer-data {
+        display: flex;
+        color: black;
+        font-size: 20px;
+        border-radius: 5px;
+        padding: 0 10px;
+        width: auto;
+        font-size: 20px;
+        justify-content: center;
+      }
+      .cronometer-title {
+        width: 100%;
+        display: flex;
+        font-size: 22px;
+        justify-content: center;
+        margin: 5px 0px;
+      }
+      ::-webkit-scrollbar {
+        width: 4px;
+      }
+      ::-webkit-scrollbar-track {
+        border-radius: 10px;
+        margin: 5px 0px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: red;
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #888;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
     </style>
     <title>Hello Kitty - Cronômetro</title>
   </head>
@@ -245,6 +305,10 @@
             iniciar
           </button>
         </div>
+        <div style="display: flex; justify-content: space-between">
+          <div id="cronometer-history" class="cronometer-history"></div>
+          <div id="cronometer-placing" class="cronometer-placing"></div>
+        </div>
       </div>
       <p class="signature">
         Feito por
@@ -253,6 +317,12 @@
     </div>
 
     <script>
+      document.getElementById(
+        "cronometer-history"
+      ).innerHTML = `<h1 class="cronometer-title">histórico</h1>`;
+      document.getElementById(
+        "cronometer-placing"
+      ).innerHTML = `<h1 class="cronometer-title">colocação</h1>`;
       document.addEventListener(
         "keydown",
         (event) => {
@@ -343,7 +413,14 @@
           document.getElementById("cronometer").innerText + " - pausado";
       };
 
+      var stopwatchHistory = [];
+
       const stop = () => {
+        stopwatchHistory.push(
+          document.getElementById("cronometer").innerText +
+            document.getElementById("milicronometer").innerText
+        );
+
         pause();
         elapsedTime = 0;
         timer();
@@ -358,6 +435,25 @@
         document.getElementById("start").removeAttribute("disabled");
         document.getElementById("cronometer").innerText = "00:00:00";
         document.title = "Hello Kitty - Cronômetro";
+
+        document.getElementById("cronometer-history").innerHTML =
+          `<h1 class="cronometer-title">histórico</h1>`.concat(
+            stopwatchHistory
+              .map(
+                (data, index) => `<div class="cronometer-data">${data}</div>`
+              )
+              .join("")
+          );
+        document.getElementById("cronometer-placing").innerHTML =
+          `<h1 class="cronometer-title">colocação</h1>`.concat(
+            stopwatchHistory
+              .sort()
+              .map(
+                (data, index) =>
+                  `<div class="cronometer-data">${index + 1}º ${data}</div>`
+              )
+              .join("")
+          );
       };
 
       const timer = () => {
