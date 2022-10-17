@@ -70,7 +70,6 @@
         cursor: pointer;
         font-family: "Courier Prime", monospace;
         background: transparent;
-        /* border: 1px solid; */
         border-radius: 6px;
         background-color: white;
         width: 327px;
@@ -265,6 +264,83 @@
         justify-content: center;
         margin: 5px 0px;
       }
+      .history-grid {
+        display: flex;
+        justify-content: space-between;
+        max-height: 200px;
+      }
+      .history-grid-disabled {
+        display: none;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 38px;
+        height: 18px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 10px;
+        width: 10px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #2196f3;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196f3;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(20px);
+        -ms-transform: translateX(20px);
+        transform: translateX(20px);
+      }
+
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+
+      .switch-container {
+        font-family: "Courier Prime", monospace;
+        font-size: 12px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+        top: 210px;
+        gap: 10px;
+      }
+
       ::-webkit-scrollbar {
         width: 4px;
       }
@@ -288,9 +364,17 @@
   <body>
     <div class="background">
       <div class="main-container">
+        <div class="switch-container">
+          <label for="slider">mostrar histórico</label>
+          <label class="switch">
+            <input type="checkbox" id="slider" onclick="handleHistory()" />
+            <span class="slider round"></span>
+          </label>
+        </div>
         <button class="copyText" onclick="copyText()" id="copyText">
           copiar tempo
         </button>
+
         <img
           class="main-hello-kitty"
           src="https://i.pinimg.com/originals/52/3a/4f/523a4f9b649b6138cd9520fe437e433a.png"
@@ -308,13 +392,7 @@
             iniciar
           </button>
         </div>
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            max-height: 200px;
-          "
-        >
+        <div id="history-grid" class="history-grid-disabled">
           <div id="cronometer-history"></div>
           <div id="cronometer-placing"></div>
         </div>
@@ -326,6 +404,17 @@
     </div>
 
     <script>
+      const handleHistory = () => {
+        if (
+          document.getElementById("history-grid").className === "history-grid"
+        ) {
+          document.getElementById("history-grid").className =
+            "history-grid-disabled";
+        } else {
+          document.getElementById("history-grid").className = "history-grid";
+        }
+      };
+
       var stopwatchHistory = [];
 
       if (stopwatchHistory.length > 0) {
@@ -429,7 +518,7 @@
         document.getElementById("start").className = "start-button";
         document.getElementById("start").removeAttribute("disabled");
         document.title =
-          document.getElementById("cronometer").innerText + " - pausado";
+          document.getElementById("cronometer").innerText + " - Pausado";
       };
 
       const stop = () => {
